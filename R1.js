@@ -1,8 +1,7 @@
-
 let otsiv = new Reviews("Oleg","good product","10/10")
 let reviews = otsiv
 function Product(name,description,price,brand,sizes,activeSize,quantity) {
-  this.id = Math.floor(Math.random() * 100) + 1  ;
+  this.id = Math.floor(Math.random() * 1000000) + 1  ;
   this.name = name;
   this.description = description;
   this.price = price;
@@ -18,9 +17,10 @@ function Product(name,description,price,brand,sizes,activeSize,quantity) {
 let lold = new Product("назва","краткий опис","ціна","бренд","розмір","активний розмір","продуктов в запасі");
 
 function Reviews (author,comment,rating) {
-  this.id = Math.floor(Math.random() * 100) + 1;
+  this.id = Math.floor(Math.random() * 1000000) + 1;
   this.date = new Date().toUTCString();
   this.author = author
   this.comment = comment
   this.rating = rating
 }
+
