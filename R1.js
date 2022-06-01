@@ -1,12 +1,4 @@
-function Product() {
-  this.otsiv  = new Reviews(1,"Oleg","good",10)
-  this.otsiv1 = new Reviews(2,"Okcana","good",9)
-  this.otsiv2 = new Reviews(3,"Milana","good",8)
-  this.otsivi = [this.otsiv,this.otsiv1,this.otsiv2]
-  this.product  = new Products(1,"ttt","description",200,"brand",["XS","S","M","L","XL","XXL"],"activeSize","quantity",this.otsivi);
-  this.product1 = new Products(2,"tar","description",250,"brand",["XS","S","M","L","XL","XXL"],"activeSize","quantity",this.otsivi);
-  this.product2 = new Products(3,"kkk","description",100,"brand",["XS","S","M","L","XL","XXL"],"activeSize","quantity",this.otsivi);
-  function Products(id,name,description,price,brand,sizes,activeSize,quantity,otsivi) {
+function Product(id,name,description,price,brand,sizes,activeSize,quantity,reviews,images) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -16,101 +8,86 @@ function Product() {
     this.activeSize = activeSize;
     this.quantity = quantity;
     this.date = new Date().toUTCString();
-    this.reviews =  otsivi
-    this.images = ["img1","img2","img3","img4","img5"]
-  }
-  function Reviews(id,author,comment,rating) {
+    this.reviews =  reviews
+    this.images = images
+
+    this.getReviewByID = function(id){
+        for(i = 0;i<this.reviews.length;i++){
+            if (this.reviews[i].id === id){
+                return this.reviews[i]
+            }
+        }
+    }
+    
+    this.addSize = function (size) {
+        this.sizes.push(size)
+    }
+
+    this.deleteSize = function (size){
+        return this.sizes.splice(this.sizes.indexOf(size), 1)
+    }
+
+    this.addReview = function (name,comment,rating){
+        this.reviews.push(new Reviews(this.otsivi.length+1,name,comment,rating));
+        return this.reviews
+    }
+
+    this.deleteReview = function (id){
+        for(let i=0; i<this.reviews.length;c++){
+          if(this.reviews[i].id === id){
+            this.reviews.splice(this.reviews.indexOf(this.reviews[i]), 1)
+          }
+        }
+        return this.reviews
+    }
+
+    this.getAverageRating = function (){
+        let rating = 0;
+        for(let i = 0;c<this.reviews.length;i++){
+          rating=rating+this.reviews[i].rating
+        }
+        return rating/=this.reviews.length
+    }
+
+    this.getImage = function (img){
+        if (this.images.indexOf(img) === undefined) {
+          return this.images[0];
+        }
+        return this.images[this.images.indexOf(img)];
+    }
+
+}
+function Reviews(id,author,comment,rating) {
     this.id = id;
     this.date = new Date().toUTCString();
     this.author = author
     this.comment = comment
     this.rating = rating
-  }
-
-  this.getReviewByID = function(id){
-    c = 0
-    for(;c<this.otsivi.length;c++){
-      if (this.otsivi[c].id === id){return console.log(this.otsivi[c])}
-    }
-  }
-
-  this.addSize = function (size) {
-    this.product.sizes.push(size)
-  }
-
-  this.deleteSize = function (rosmer){
-    ind = this.product.sizes.indexOf(rosmer)
-    return this.product.sizes.splice(ind, 1)[0]
-  }
-
-  this.addReview = function (){
-    this.otsivi.push(new Reviews(this.otsivi.length+1,"Udhen","good",8));
-    return otsivi
-  }
-
-  this.deleteReview = function (id){
-    for(c=0;c<this.otsivi.length;c++){
-      if(this.otsivi[c].id == id){
-        ind = this.otsivi.indexOf(this.otsivi[c])
-        this.otsivi.splice(ind, 1)
-        this.otsivi[c] = this.otsivi[c]
-        console.log(otsivi[c])
-        return this.otsivi
-      }
-    }
-  }
-
-  this.getAverageRating = function (){
-    c=0;b=0
-    for(;c<this.otsivi.length;c++){
-      b=b+this.otsivi[c].rating
-    }
-    c = b / c
-    return console.log(c)
-  }
-
-  this.getImage = function (img){
-    ind = this.product.images.indexOf(img)
-    if (ind === undefined) {
-      return this.product.images[0];
-    }
-    return console.log(this.product.images[ind]);
-  }
 }
-let a = new Product()
+const a = new Product(1,"aaa","description",100,"guci",["XS","S","M","L","XL","XXL"],"L","quantity",[new Reviews(1,"Oleg","good",10),new Reviews(2,"Okcana","good",9)],["img1","img2","img3"])
+const b = new Product(2,"cccc","description",300,"gucishik",["XS","S","M","L","XL","XXL"],"XX","quantity",[new Reviews(3,"Oleg","good",10),new Reviews(4,"Okcana","good",9)],["img1","img2","img3"])
+const c = new Product(3,"bbb","description",200,"abibas",["XS","S","M","L","XL","XXL"],"XXL","quantity",[new Reviews(5,"Oleg","good",10),new Reviews(6,"Okcana","good",9)],["img1","img2","img3"])
+const products = [a,b,c]
+
 function searchProducts(products,search){
-  res=[]
-  for(b=0,c=0;b<products.length;b++){
-    if(products[b].name.includes(search)){
-      res[c]=products[b].name
-      c++
-    }
-  }
-  return console.log(res)
-}
-searchProducts([a.product,a.product1,a.product2],"t")
-
-function sortProducts(products,sort){
-  res=[]
-  for(b=0;b<products.length;b++){
-    if(products[b].name.includes(sort[1])){
-      sort[1] = products[b].name
-    }
-    if(products[b].name.includes(sort[1]) && sort[2] === products[b].id && sort[0] === products[b].price){
-      res[0] = products[b]
-      products.splice(products.indexOf(products[b]), 1)
-      pri = []
-      for(a=0;a<products.length;a++){pri[a] = products[a].price}
-      for(a=0,c=1;a<products.length;a++){
-        if(Math.min.apply(null, pri) === products[a].price){
-        res[c] = products[a]
-        pri.splice(pri.indexOf(Math.min.apply(null, pri)), 1)
-        c++
-        }
+    res=[];let i=0
+    for(let b=0;b<products.length;b++){
+      if(products[b].name.includes(search)){
+        res[i]=products[b].name
+        i++
       }
     }
-  } 
-  return res
+    return console.log(res)
 }
-sortProducts([a.product,a.product1,a.product2],[100,"k",3])
 
+function sortProducts(products,sortRule){
+    return products.sort(function(a, b) {
+      if (sortRule === 'id' || sortRule === 'price') {
+          return a[sortRule] - b[sortRule];
+      } else if (sortRule === 'name') {
+          if(a.name < b.name){
+            return -1
+          }else return 1
+      }
+  })
+  }
