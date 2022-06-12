@@ -23,9 +23,8 @@ class AbstractProduct {
   getFullInformation(){
     return `id - ${this.id}\nname - ${this.name}\ndescription - ${this.description}\nprice - ${this.price}\nbrand - ${this.brand}\nquantity - ${this.quantity}\notsivi - ${this.otsivi}\nimg - ${this.img}\ndate - ${this.date}`
   }
-  getPriceForQuantity(int){
-    let res = `$${int * this.price}`
-    return res
+  getPriceForQuantity(){
+    return `$${this.quantity * this.price}`
   }
 }
 
