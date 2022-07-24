@@ -1,0 +1,56 @@
+let contents = 
+`GET /sum?nums=1,2,2 HTTP/1.1
+Host: student.shpp.me
+`
+
+
+
+function parseTcpStringAsHttpRequest(string) {
+  let uri = string.match(/ ([a-zA-Z0-9?=,./]+) /gi)[0]
+  uri = uri.replace(/ /gi,"")
+  let body = uri.match(/\d/gi)
+  return { 
+    method: string.match(/ ([a-zA-Z0-9?=,./ ]+)/g)[0], 
+    uri : uri, 
+    headers:  "...", 
+    body : body, 
+  }; 
+}
+
+function processHttpRequest(method, uri, headers, body) {
+  if (uri == uri){
+    if(false === uri.includes("?nums")){
+      return outputHttpResponse(method.match(/ [a-zA-Z0-9/.]+/gi),["400 Bad Request","not found"],headers,body)
+    }
+    if(false === uri.includes("/sum")){
+      return outputHttpResponse(method.match(/ [a-zA-Z0-9/.]+/gi),["404 Not Found","not found"],headers,body)
+    }
+    if(uri.includes("/sum?nums")){
+      let sum = 0
+      for(let a=0;a<body.length;a++){
+        body[a] = Number(body[a])
+        sum = sum + body[a]
+      }
+      if (sum === 5){
+        return outputHttpResponse(method.match(/ [a-zA-Z0-9/.]+/gi),["200 OK",sum],headers,body)
+      }else{
+        return outputHttpResponse(method.match(/ [a-zA-Z0-9/.]+/gi),["НЕ ТО ШО НАДО",sum],headers,body)
+      }
+    }
+  }
+  return outputHttpResponse(method.match(/ [a-zA-Z0-9/.]+/gi),["400 Bad Request","not found"],headers,body)
+}
+
+function outputHttpResponse(statusCode,statusMessage,headers, body) {
+  console.log(` ${statusCode} ${statusMessage[0]}
+  Date: ${new Date().toUTCString()}
+  Server: Apache/2.2.14 (Win32)
+  Content-Length: ${statusMessage[1].length||1}
+  Connection: Closed
+  Content-Type: text/html; charset=utf-8
+  
+  ${statusMessage[1]}`)
+}
+
+http = parseTcpStringAsHttpRequest(contents);
+processHttpRequest(http.method, http.uri, http.headers, http.body)
